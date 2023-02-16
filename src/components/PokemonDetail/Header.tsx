@@ -15,57 +15,59 @@ export default function Header({name,image,type,order}:Props) {
   const bgStyle = {backgroundColor: getColorByType(type), ...styles.bgStyles}
 
     return (
-    <SafeAreaView style={styles.contHeader}>
-        <View style={bgStyle}>
-        <SafeAreaView style={styles.cont}>
-        <Text style={styles.name}>{capitalize(name)}</Text>
-            <Text style={styles.order}>#{order.toString().padStart(3, '0')}</Text>
-            <View style={styles.imgCont}>
-                <Image source={{uri: image}} style={styles.image} />
-            </View>
-        </SafeAreaView>
+<>
+      <View style={bgStyle} />
+
+      <SafeAreaView style={styles.content}>
+        <View style={styles.header}>
+          <Text style={styles.name}>{capitalize(name)}</Text>
+          <Text style={styles.order}>#{order.toString().padStart(3, '0')}</Text>
         </View>
-        
-    </SafeAreaView>
+        <View style={styles.contentImg}>
+          <Image source={{ uri: image }} style={styles.image} />
+        </View>
+      </SafeAreaView>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-    contHeader:{
-        height:'100%'
-    },
-    image:{
-        width:250,
-        height:250
-    },
-    name:{
-        marginTop:20,
-        textAlign:'center',
-        fontWeight:'bold',
-        fontSize:29,
-        color:'white',
-    },
-    order:{
-        marginTop:20,
-        textAlign:'center',
-        fontWeight:'bold',
-        fontSize:24,
-        color:'white', 
-    },
-    cont:{
-       marginHorizontal:20,
-       marginTop:30 
-    },
-    imgCont:{
-        flex:1,
-        alignItems:'center',
-    },
-    bgStyles:{
-        flex: 1,
-        padding:10,
-        height:500,
-        width:'100%',
-        borderBottomEndRadius:300,
-        borderBottomLeftRadius:300,
-    }
-})
+  bgStyles: {
+    width: "100%",
+    height: 400,
+    position: "absolute",
+    borderBottomEndRadius: 300,
+    borderBottomLeftRadius: 300,
+    transform: [{ scaleX: 2 }],
+  },
+  content: {
+    marginHorizontal: 20,
+    marginTop: 30,
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingTop: 40,
+  },
+  name: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 27,
+  },
+  order: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  contentImg: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    top: 30,
+  },
+  image: {
+    width: 250,
+    height: 300,
+    resizeMode: "contain",
+  },
+});

@@ -16,4 +16,5 @@ export interface PokemonComponent {
   name: string;
   order: number;
   type: string;
+  allTypes: Array<{ type: { name: string; url: string } }>;
 }

@@ -11,6 +11,7 @@ interface Props{
         name: string;
         order: number;
         type: string;
+        allTypes:any
     }
 }
 

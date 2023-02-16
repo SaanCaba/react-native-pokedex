@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 import { getPokemonDetail } from "../api/pokemon";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../components/PokemonDetail/Header";
+import Type from "../components/PokemonDetail/Type";
 interface Props{
   route:{
     key:string,
@@ -19,19 +20,24 @@ export default function DetailPokemon({route}:Props) {
   image:'',
   name:'',
   order:'',
-  type:''
+  type:'',
+  allTypes: []
  })
  useEffect(() =>{
     setPokeDetail(route.params.data)
   }, [route.params])
+  console.log(pokeDetail)
   return (
-    <ScrollView style={styles.contDetail} >
-      <Header image={pokeDetail.image} type={pokeDetail.type} order={pokeDetail.order} name={pokeDetail.name} />
+    <ScrollView >
+      <Header 
+      image={pokeDetail.image} 
+      type={pokeDetail.type} 
+      order={pokeDetail.order} 
+      name={pokeDetail.name}
+       />
+       <Type types={pokeDetail.allTypes}/>
     </ScrollView>
   );
 }
 
-const styles = StyleSheet.create({
-  contDetail:{
-  }
-})
+
