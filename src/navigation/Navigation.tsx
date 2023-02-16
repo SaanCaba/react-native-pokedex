@@ -15,6 +15,7 @@ const Tab = createMaterialBottomTabNavigator()
 export default function Navigation() {
   return (
     <Tab.Navigator
+    
     >
       <Tab.Screen
       name="Account"

@@ -8,6 +8,8 @@ import Pokemon from "../components/Pokemon";
 
 export default function Pokedex({navigation}:any) {
     const[pokemons, setPokemons] = useState<any>([])
+    const[nextUrl, setNextUrl] = useState<any>([])
+    const[loading, setLoading] = useState(false)
     useEffect(() => {
         (async() =>{
             await loadPokemons();
@@ -17,8 +19,10 @@ export default function Pokedex({navigation}:any) {
 
     const loadPokemons = async () =>{
         try {
-       const response : PokemonResponse | undefined = await getAllPokemons();
-        const pokemonsArr = [];
+            setLoading(true)
+       const response : PokemonResponse | undefined = await getAllPokemons(nextUrl);
+       setNextUrl(response?.next) 
+       const pokemonsArr: PokemonComponent[] = [];
         if(response !== undefined){
             for await (const pokemonItem of response.results) {
              const pokeDetail  = await getPokemonDeatils(pokemonItem.url);
@@ -30,22 +34,25 @@ export default function Pokedex({navigation}:any) {
                 image: pokeDetail.sprites.other.home.front_default
              })
             }
-            setPokemons(pokemonsArr)
+            setPokemons((pokemons:PokemonComponent[]) => pokemons.concat(pokemonsArr))
+            setLoading(false)
+            // console.log(pokemonsArr)
+            // setPokemons([...pokemons, pokemonsArr])
+            // console.log("pokemons", pokemons)
         }
         } catch (error) {
             console.log(error)
-        }
+        } 
+        
     }
 
-    const goPage = (page:string)=>{
-        navigation.navigate(page)
-    }
+    // const goPage = (page:string)=>{
+    //     navigation.navigate(page)
+    // }
     
     return (
     <SafeAreaView>
-      <Text>Pokedex</Text>
-      <Pokemon pokemons={pokemons} />
-        <Button title="Detail" onPress={() => goPage("Pokemon Detail")}></Button>
+      <Pokemon loading={loading}  nextUrl={nextUrl} pokemons={pokemons} loadPokemon={loadPokemons} />
     </SafeAreaView>
   );
 }

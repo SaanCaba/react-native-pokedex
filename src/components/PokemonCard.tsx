@@ -1,5 +1,8 @@
 import { View, Text, StyleSheet, Image, TouchableWithoutFeedback } from "react-native";
 import React from "react";
+import { capitalize } from "lodash";
+import getColorByType from "../utils/getColorByType";
+import { useNavigation } from "@react-navigation/native";
 
 interface Props{
     pokemonItem: {
@@ -13,18 +16,22 @@ interface Props{
 
 export default function PokemonCard({pokemonItem}:Props) {
     
+    const navigation = useNavigation()
+    const bgStyles = {backgroundColor: getColorByType(pokemonItem.type), ...styles.bgStyles}
 
     const goToDetail = () => {
-        console.log('vamos al detail' + pokemonItem.name)
+        navigation.navigate("Pokemon Detail", {
+            data: pokemonItem
+        })
     }
-    console.log(pokemonItem.image)
+    // console.log(pokemonItem.image)
     return (
     <TouchableWithoutFeedback onPress={()=> goToDetail()}>
        <View style={styles.card}>
            <View style={styles.spacing}>
-                <View style={styles.bgStyles}>
+                <View style={bgStyles}>
                     <Text style={styles.order}>#{pokemonItem.order.toString().padStart(3, '0')}</Text>
-                    <Text style={styles.name}>{pokemonItem.name}</Text>
+                    <Text style={styles.name}>{capitalize(pokemonItem.name)}</Text>
                     <Image style={styles.imagePokemon} source={{uri: pokemonItem.image}} />
                 </View>
            </View>
@@ -43,10 +50,9 @@ const styles = StyleSheet.create({
         padding:5
     },
     bgStyles:{
-        backgroundColor: "gray",
-        borderRadius:10,
-        height:'100%',
-        justifyContent:'center',
+        flex: 1,
+        borderRadius:15,
+        padding:10
     },
     imagePokemon:{
         position:'absolute',
