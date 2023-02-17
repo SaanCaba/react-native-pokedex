@@ -32,7 +32,8 @@ export default function Pokedex({navigation}:any) {
                 type:pokeDetail.types[0].type.name,
                 order:pokeDetail.order,
                 image: pokeDetail.sprites.other.home.front_default,
-                allTypes: pokeDetail.types
+                allTypes: pokeDetail.types,
+                stats: pokeDetail.stats
              })
             }
             setPokemons((pokemons:PokemonComponent[]) => pokemons.concat(pokemonsArr))

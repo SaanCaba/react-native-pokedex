@@ -9,7 +9,6 @@ interface Props{
 }
 
 export default function Type({types}:Props) {
-    console.log(types)
     // const bgStyle = {backgroundColor: getColorByType(types), ...styles.bgStyles}
 
   return (

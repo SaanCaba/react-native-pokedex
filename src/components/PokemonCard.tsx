@@ -11,7 +11,8 @@ interface Props{
         name: string;
         order: number;
         type: string;
-        allTypes:any
+        allTypes:any,
+        stats:any
     }
 }
 
@@ -19,8 +20,8 @@ export default function PokemonCard({pokemonItem}:Props) {
     
     const navigation = useNavigation()
     const bgStyles = {backgroundColor: getColorByType(pokemonItem.type), ...styles.bgStyles}
-
     const goToDetail = () => {
+        console.log(pokemonItem)
         navigation.navigate("Pokemon Detail", {
             data: pokemonItem
         })
