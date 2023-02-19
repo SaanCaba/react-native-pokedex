@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
         paddingHorizontal:5,
         // con Platform tenemos la plataforma.
         marginTop: Platform.OS === 'android' ? 30 : 0,
-        backgroundColor: Platform.OS == 'android' ? 'green' : 'gray'
+        // backgroundColor: Platform.OS == 'android' ? 'green' : 'gray'
     },
     spinner:{
         marginTop:20,

@@ -29,7 +29,7 @@ export default function Stats({stats}:Props) {
                         <View style={styles.contBarra}>
                             <Text style={styles.numberStat}>{e.base_stat}</Text>
                             <View style={styles.bgBar}>
-                                <View style={{ width:e.base_stat, height:5, backgroundColor: e.base_stat >= 100 ? '#f7d83b' : e.base_stat > 50 ? '#b2f0ad' : '#f0412e' }} />
+                                <View style={{ width:e.base_stat + '%', height:5, backgroundColor: e.base_stat >= 100 ? '#f7d83b' : e.base_stat > 50 ? '#b2f0ad' : '#f0412e' }} />
                             </View>
                         </View>
                     </View>
