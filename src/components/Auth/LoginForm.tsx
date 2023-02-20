@@ -1,8 +1,10 @@
 import { View, Text, StyleSheet, TextInput, Button, Keyboard } from "react-native";
-import React, { SetStateAction, useState } from "react";
+import React, { SetStateAction, useEffect, useState, useContext } from "react";
 import { useFormik } from "formik";
 import * as Yup from 'yup'
 import { user } from "../../utils/userDBFalse";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { Context } from "../../context/Context";
 
 interface Props{
     setAuth :  (val:boolean) => void
@@ -10,7 +12,23 @@ interface Props{
 
 export default function LoginForm({setAuth}:Props) {
 
-    const [err, setError] = useState('')
+    const [err, setError] = useState('');
+
+    // auth
+
+    const appContext = useContext(Context)
+    
+    // useEffect(() => {
+    //     appContext?.setConfig({
+    //         ...appContext.config,
+    //         password:'pepe'
+    //     })
+    //     appContext?.setConfig({
+    //         ...appContext.config,
+    //         name:'pedro'
+    //     })
+    //     console.log(appContext)
+    // }, [])
 
     const formik = useFormik({
         initialValues: initialValues(),
@@ -20,6 +38,10 @@ export default function LoginForm({setAuth}:Props) {
         onSubmit: (val) => {
             const {username, password} = val;
             if(username === user.username && password === user.password){
+                appContext?.setConfig({
+                    username: user.username,
+                    token:'2913i1293i2193i'
+                })
                 return setAuth(true)
             }else{
                 setError("The username or password are incorrect")
@@ -27,10 +49,10 @@ export default function LoginForm({setAuth}:Props) {
         }
     });
 
-    
+
 
   return (
-    <View>
+    <View style={{margin:10}}>
         <Text style={styles.titleLogin}>Log in</Text>
         <TextInput
         placeholder="Name..."
@@ -49,7 +71,11 @@ export default function LoginForm({setAuth}:Props) {
         onChangeText={(value) => formik.setFieldValue('password', value) }
         />
         <Text style={styles.errText}>{formik.errors.password}</Text>
-        <Button onPress={() => formik.handleSubmit()} title="Log in"></Button>
+        <TouchableOpacity style={styles.btnLogin} onPress={() => formik.handleSubmit()}>
+            <Text style={styles.textBtn}>LOG IN</Text>
+        </TouchableOpacity>
+
+        {/* <Button onPress={() => formik.handleSubmit()} title="Log in"></Button> */}
         <Text style={styles.errText2}>{err}</Text>
     </View>
   );
@@ -96,6 +122,18 @@ const styles = StyleSheet.create({
         borderWidth:1,
         borderRadius:10,
         padding:10,
-        margin:10
+        marginTop:10,
+        marginBottom:10
+    },
+    btnLogin:{
+        width:'100%',
+        backgroundColor:'#171716',
+        alignItems:'center',
+        padding:10,
+        borderRadius:10
+    },
+    textBtn:{
+        color:'white',
+        fontWeight:"600"
     }
 })

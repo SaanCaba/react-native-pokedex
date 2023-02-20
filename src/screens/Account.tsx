@@ -1,22 +1,31 @@
 import { View, Text, StyleSheet, Button } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import LoginForm from "../components/Auth/LoginForm";
 import UserData from "../components/Auth/UserData";
+import { Context } from "../context/Context";
 
 export default function Account() {
   
   const[auth, setAuth] = useState(false)
-
+  const context = useContext(Context)
+  const logout = () => {
+    setAuth(false)
+   return context?.setConfig({
+      token:'',
+      username:''
+    })
+    
+  }
   return (
-    <View>
+    <View style={styles.contAccount}>
       {
-        auth ? 
+        context?.config?.token ? 
         <>
         <UserData />
         <Button
         title="Log Out"
-        onPress={() => setAuth(false)}></Button>
+        onPress={() => logout()}></Button>
         </>
         : 
         <LoginForm setAuth={setAuth} />
@@ -26,7 +35,8 @@ export default function Account() {
 }
 
 const styles = StyleSheet.create({
-  btnLogOut:{
-
+  contAccount:{
+    flex:1,
+    justifyContent:'center'
   }
 })
