@@ -5,30 +5,18 @@ import * as Yup from 'yup'
 import { user } from "../../utils/userDBFalse";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Context } from "../../context/Context";
+import { useNavigation } from "@react-navigation/native";
 
 interface Props{
-    setAuth :  (val:boolean) => void
+    setAuth :  (val:boolean) => void,
 }
 
 export default function LoginForm({setAuth}:Props) {
 
     const [err, setError] = useState('');
 
-    // auth
-
+    const navigation = useNavigation()
     const appContext = useContext(Context)
-    
-    // useEffect(() => {
-    //     appContext?.setConfig({
-    //         ...appContext.config,
-    //         password:'pepe'
-    //     })
-    //     appContext?.setConfig({
-    //         ...appContext.config,
-    //         name:'pedro'
-    //     })
-    //     console.log(appContext)
-    // }, [])
 
     const formik = useFormik({
         initialValues: initialValues(),
@@ -36,32 +24,45 @@ export default function LoginForm({setAuth}:Props) {
         validateOnChange:true,
         validateOnMount:false,
         onSubmit: (val) => {
-            const {username, password} = val;
-            if(username === user.username && password === user.password){
-                appContext?.setConfig({
-                    username: user.username,
-                    token:'2913i1293i2193i'
+            setError('')
+            // const {email, password} = val;
+            try {
+                fetch('http://192.168.0.70:3001/auth/login', {
+                method: "POST",    
+                body: JSON.stringify(val),
+                headers: {"Content-type": "application/json; charset=UTF-8"}
                 })
-                return setAuth(true)
-            }else{
-                setError("The username or password are incorrect")
+                .then(res => res.json())
+                .then(data => {
+                    if(data?.statusCode >= 400 ){
+                        setError(data.message)
+                       return alert(data.message);
+                    }
+                    console.log(data)
+                })
+            } catch (error) {
+                console.log(error)
             }
+  
         }
     });
 
+   const goToRegister = () =>{
+    navigation.navigate("Register")
+    }
 
 
   return (
     <View style={{margin:10}}>
         <Text style={styles.titleLogin}>Log in</Text>
         <TextInput
-        placeholder="Name..."
-        style={[styles.input, formik.errors.username ? styles.errInput : styles.input ]}
+        placeholder="Email..."
+        style={[styles.input, formik.errors.email ? styles.errInput : styles.input ]}
         autoCapitalize='none'
-        value={formik.values.username}
-        onChangeText={(value) => formik.setFieldValue('username', value) }
+        value={formik.values.email}
+        onChangeText={(value) => formik.setFieldValue('email', value) }
         />
-        <Text style={styles.errText}>{formik.errors.username}</Text>
+        <Text style={styles.errText}>{formik.errors.email}</Text>
         <TextInput
         placeholder="Password..."
         style={[styles.input, formik.errors.password ? styles.errInput : styles.input]}
@@ -74,16 +75,19 @@ export default function LoginForm({setAuth}:Props) {
         <TouchableOpacity style={styles.btnLogin} onPress={() => formik.handleSubmit()}>
             <Text style={styles.textBtn}>LOG IN</Text>
         </TouchableOpacity>
-
+        {/* <Button title="test" onPress={()=> test()}></Button> */}
         {/* <Button onPress={() => formik.handleSubmit()} title="Log in"></Button> */}
         <Text style={styles.errText2}>{err}</Text>
+        <Text >No tenés cuenta? <Text onPress={()=> goToRegister()} style={styles.registerHere}>Registrate aquí!</Text></Text> 
+        
+        
     </View>
   );
 }
 
 function initialValues (){
     return {
-        username:'',
+        email:'',
         password:''
     }
 
@@ -91,7 +95,7 @@ function initialValues (){
 
 function validationSchema(){
     return {
-        username: Yup.string().required("The name is required"),
+        email: Yup.string().required("The email is required"),
         password: Yup.string().required("The password is required")
     }
 }
@@ -135,5 +139,9 @@ const styles = StyleSheet.create({
     textBtn:{
         color:'white',
         fontWeight:"600"
+    },
+    registerHere:{
+        textDecorationLine:'underline',
+        fontWeight:'bold'
     }
 })
